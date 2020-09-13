@@ -14,9 +14,12 @@ fun NewsApp(navigationViewModel: NavigationViewModel, appContainer: AppContainer
     val currentScreen by navigationViewModel.currentScreen.observeAsState()
 
     when(currentScreen) {
-        is Screen.NewsList -> NewsListScreen(repository = appContainer.newsPostsRepository) {
-            navigationViewModel.navigateTo(it)
-        }
         is Screen.NewsDetail -> NewsDetailScreen((currentScreen as Screen.NewsDetail).newsPost)
+        else -> {
+            println("ab")
+            NewsListScreen(repository = appContainer.newsPostsRepository) {
+                navigationViewModel.navigateTo(it)
+            }
+        }
     }
 }
