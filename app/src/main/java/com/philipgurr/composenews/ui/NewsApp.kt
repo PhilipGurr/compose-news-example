@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import com.philipgurr.composenews.di.AppContainer
 import com.philipgurr.composenews.ui.detail.NewsDetailScreen
+import com.philipgurr.composenews.ui.favorites.FavoritesListScreen
 import com.philipgurr.composenews.ui.newslist.NewsListScreen
 import com.philipgurr.composenews.viewmodel.NavigationViewModel
 import com.philipgurr.composenews.viewmodel.Screen
@@ -14,10 +15,13 @@ fun NewsApp(navigationViewModel: NavigationViewModel, appContainer: AppContainer
     val currentScreen by navigationViewModel.currentScreen.observeAsState()
 
     when(currentScreen) {
-        is Screen.NewsDetail -> NewsDetailScreen((currentScreen as Screen.NewsDetail).newsPost)
+        is Screen.NewsDetail -> NewsDetailScreen(appContainer.newsRepository, (currentScreen as Screen.NewsDetail).newsPost)
+        is Screen.FavoritesList -> FavoritesListScreen(appContainer.newsRepository) {
+            navigationViewModel.navigateTo(it)
+        }
         else -> {
             println("ab")
-            NewsListScreen(repository = appContainer.newsPostsRepository) {
+            NewsListScreen(appContainer.newsRepository) {
                 navigationViewModel.navigateTo(it)
             }
         }

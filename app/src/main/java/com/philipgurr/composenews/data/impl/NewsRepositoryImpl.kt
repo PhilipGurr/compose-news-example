@@ -1,27 +1,30 @@
 package com.philipgurr.composenews.data.impl
 
+import android.util.Log
 import com.philipgurr.composenews.data.NewsRepository
+import com.philipgurr.composenews.data.datasource.LocalNewsDataSource
 import com.philipgurr.composenews.data.datasource.NewsDataSource
 import com.philipgurr.composenews.domain.NewsPost
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.*
 
 @ExperimentalCoroutinesApi
 class NewsRepositoryImpl(
-    private val newsDataSource: NewsDataSource
+    private val newsDataSource: NewsDataSource,
+    private val localNewsDao: LocalNewsDataSource
 ) : NewsRepository {
-    private val posts = MutableStateFlow<List<NewsPost>>(listOf())
+    override fun loadNewsPosts() = flow {
+        emit(newsDataSource.getNewsPosts("us").articles)
+    }.flowOn(Dispatchers.IO)
 
-    override fun observeNewsPosts(): Flow<List<NewsPost>> = posts
+    override fun loadFavorites() = localNewsDao.getAll()
 
-    override suspend fun loadNewsPosts() = withContext(Dispatchers.IO) {
-        try {
-            posts.value = newsDataSource.getNewsPosts("us").articles
-        } catch(ex: Exception) {
-            posts.value = listOf()
-        }
+    override suspend fun addFavorite(newsPost: NewsPost) {
+        localNewsDao.insert(newsPost)
+    }
+
+    override suspend fun deleteFavorite(newsPost: NewsPost) {
+        localNewsDao.delete(newsPost)
     }
 }

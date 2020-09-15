@@ -4,6 +4,8 @@ import com.philipgurr.composenews.domain.NewsPost
 import kotlinx.coroutines.flow.Flow
 
 interface NewsRepository {
-    fun observeNewsPosts(): Flow<List<NewsPost>>
-    suspend fun loadNewsPosts()
+    fun loadNewsPosts(): Flow<List<NewsPost>>
+    fun loadFavorites(): Flow<List<NewsPost>>
+    suspend fun addFavorite(newsPost: NewsPost)
+    suspend fun deleteFavorite(newsPost: NewsPost)
 }

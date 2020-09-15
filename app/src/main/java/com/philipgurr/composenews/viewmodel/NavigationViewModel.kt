@@ -7,6 +7,7 @@ import com.philipgurr.composenews.domain.NewsPost
 
 sealed class Screen {
     object NewsList : Screen()
+    object FavoritesList : Screen()
     data class NewsDetail(val newsPost: NewsPost) : Screen()
 }
 
@@ -18,9 +19,5 @@ class NavigationViewModel : ViewModel() {
     fun navigateTo(screen: Screen) {
         previousScreen = _currentScreen.value ?: return
         _currentScreen.value = screen
-    }
-
-    fun navigateBack() {
-        _currentScreen.value = previousScreen
     }
 }
