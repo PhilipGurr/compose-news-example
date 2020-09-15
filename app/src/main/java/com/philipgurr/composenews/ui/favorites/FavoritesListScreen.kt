@@ -10,10 +10,11 @@ import com.philipgurr.composenews.data.NewsRepository
 import com.philipgurr.composenews.ui.common.DefaultTopBar
 import com.philipgurr.composenews.ui.common.Drawer
 import com.philipgurr.composenews.ui.common.NewsList
+import com.philipgurr.composenews.viewmodel.NavigationViewModel
 import com.philipgurr.composenews.viewmodel.Screen
 
 @Composable
-fun FavoritesListScreen(repository: NewsRepository, navigate: (Screen) -> Unit) {
+fun FavoritesListScreen(navigationViewModel: NavigationViewModel, repository: NewsRepository, navigate: (Screen) -> Unit) {
     val scaffoldState = rememberScaffoldState()
     val posts = repository.loadFavorites().collectAsState(initial = listOf())
 
@@ -23,7 +24,7 @@ fun FavoritesListScreen(repository: NewsRepository, navigate: (Screen) -> Unit) 
             DefaultTopBar(scaffoldState = scaffoldState)
         },
         drawerContent = {
-            Drawer(navigate = navigate)
+            Drawer(navigationViewModel = navigationViewModel, navigate = navigate)
         },
         bodyContent = {
             NewsList(it, posts.value, navigate)

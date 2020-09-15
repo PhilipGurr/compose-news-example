@@ -4,27 +4,33 @@ import androidx.compose.foundation.ClickableText
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.runtime.State
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
 import com.philipgurr.composenews.R
+import com.philipgurr.composenews.viewmodel.NavigationViewModel
 import com.philipgurr.composenews.viewmodel.Screen
 
 @Composable
-fun Drawer(currentScreen: Screen = Screen.NewsList, navigate: (Screen) -> Unit = {}) {
+fun Drawer(navigationViewModel: NavigationViewModel, navigate: (Screen) -> Unit = {}) {
     Column(
         modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(10.dp),
         horizontalGravity = Alignment.CenterHorizontally
     ) {
         val activatedColor = Color(ContextAmbient.current.getColor(R.color.design_default_color_primary))
-        showHome(currentScreen, activatedColor, navigate)
-        showFavorites(currentScreen, activatedColor, navigate)
+
+        val drawerState by navigationViewModel.currentScreen.observeAsState()
+        showHome(drawerState ?: Screen.NewsList, activatedColor, navigate)
+        showFavorites(drawerState ?: Screen.NewsList, activatedColor, navigate)
     }
 }
 
@@ -37,10 +43,11 @@ private fun showHome(
     if (currentScreen is Screen.NewsList) {
         ClickableText(
             text = AnnotatedString("Home"),
-            style = MaterialTheme.typography.h4 + TextStyle(color = activatedColor),
-        ) {}
+            style = MaterialTheme.typography.h4 + TextStyle(color = activatedColor, textAlign = TextAlign.Center),
+            modifier = Modifier.fillMaxWidth()
+        ) { }
     } else {
-        ClickableText(text = AnnotatedString("Home"), style = MaterialTheme.typography.h4) {
+        ClickableText(text = AnnotatedString("Home"), style = MaterialTheme.typography.h4 + TextStyle(textAlign = TextAlign.Center)) {
             navigate(Screen.NewsList)
         }
     }
@@ -55,17 +62,11 @@ private fun showFavorites(
     if (currentScreen is Screen.FavoritesList) {
         ClickableText(
             text = AnnotatedString("Favorites"),
-            style = MaterialTheme.typography.h4 + TextStyle(color = activatedColor),
+            style = MaterialTheme.typography.h4 + TextStyle(color = activatedColor, textAlign = TextAlign.Center),
         ) {}
     } else {
-        ClickableText(text = AnnotatedString("Favorites"), style = MaterialTheme.typography.h4) {
+        ClickableText(text = AnnotatedString("Favorites"), style = MaterialTheme.typography.h4 + TextStyle(textAlign = TextAlign.Center)) {
             navigate(Screen.FavoritesList)
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun Preview() {
-    Drawer()
 }

@@ -16,12 +16,12 @@ fun NewsApp(navigationViewModel: NavigationViewModel, appContainer: AppContainer
 
     when(currentScreen) {
         is Screen.NewsDetail -> NewsDetailScreen(appContainer.newsRepository, (currentScreen as Screen.NewsDetail).newsPost)
-        is Screen.FavoritesList -> FavoritesListScreen(appContainer.newsRepository) {
+        is Screen.FavoritesList -> FavoritesListScreen(navigationViewModel, appContainer.newsRepository) {
             navigationViewModel.navigateTo(it)
         }
         else -> {
             println("ab")
-            NewsListScreen(appContainer.newsRepository) {
+            NewsListScreen(navigationViewModel, appContainer.newsRepository) {
                 navigationViewModel.navigateTo(it)
             }
         }

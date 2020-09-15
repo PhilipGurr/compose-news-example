@@ -9,12 +9,13 @@ import com.philipgurr.composenews.domain.NewsPost
 import com.philipgurr.composenews.ui.common.DefaultTopBar
 import com.philipgurr.composenews.ui.common.Drawer
 import com.philipgurr.composenews.ui.common.NewsList
+import com.philipgurr.composenews.viewmodel.NavigationViewModel
 import com.philipgurr.composenews.viewmodel.Screen
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @Composable
-fun NewsListScreen(repository: NewsRepository, navigate: (Screen) -> Unit) {
+fun NewsListScreen(navigationViewModel: NavigationViewModel, repository: NewsRepository, navigate: (Screen) -> Unit) {
     val scaffoldState = rememberScaffoldState()
     val posts by repository.loadNewsPosts().collectAsState(listOf())
 
@@ -24,7 +25,7 @@ fun NewsListScreen(repository: NewsRepository, navigate: (Screen) -> Unit) {
             DefaultTopBar(scaffoldState = scaffoldState)
         },
         drawerContent = {
-            Drawer(navigate = navigate)
+            Drawer(navigationViewModel = navigationViewModel, navigate = navigate)
         },
         bodyContent = {
             NewsList(it, posts, navigate)
