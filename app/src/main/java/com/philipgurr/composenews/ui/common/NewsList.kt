@@ -48,12 +48,15 @@ fun NewsListItem(newsPost: NewsPost, onClick: (NewsPost) -> Unit) {
             modifier = Modifier.fillMaxWidth().clickable(onClick = { onClick(newsPost) }),
             horizontalGravity = Alignment.CenterHorizontally
         ) {
-            CoilImage(
-                data = newsPost.urlToImage,
-                modifier = Modifier.fillMaxWidth().clip(
-                    RoundedCornerShape(30.dp, 30.dp, 0.dp, 0.dp)
+            val imageUrl = newsPost.urlToImage
+            if(imageUrl != null && imageUrl.isNotEmpty()) {
+                CoilImage(
+                    data = imageUrl,
+                    modifier = Modifier.fillMaxWidth().clip(
+                        RoundedCornerShape(30.dp, 30.dp, 0.dp, 0.dp)
+                    )
                 )
-            )
+            }
 
             articleText(newsPost)
         }
@@ -65,12 +68,12 @@ private fun articleText(newsPost: NewsPost) {
     val paddingTitle = Modifier.padding(15.dp, 10.dp, 15.dp, 5.dp)
     val paddingDesc = Modifier.padding(15.dp, 5.dp, 15.dp, 20.dp)
     Text(
-        text = newsPost.title,
-        style = MaterialTheme.typography.body1,
+        text = newsPost.title ?: "",
+        style = MaterialTheme.typography.h6,
         modifier = paddingTitle
     )
     Text(
-        text = newsPost.description,
+        text = newsPost.description ?: "",
         style = MaterialTheme.typography.body2,
         modifier = paddingDesc
     )

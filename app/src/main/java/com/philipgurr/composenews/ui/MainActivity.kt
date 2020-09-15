@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if(navigationViewModel.currentScreen.value is Screen.NewsDetail) {
-            navigationViewModel.navigateTo(Screen.NewsList)
+            navigationViewModel.navigateBack()
         } else {
             super.onBackPressed()
         }

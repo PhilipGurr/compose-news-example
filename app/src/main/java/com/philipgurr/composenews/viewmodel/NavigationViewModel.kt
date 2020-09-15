@@ -20,4 +20,8 @@ class NavigationViewModel : ViewModel() {
         previousScreen = _currentScreen.value ?: return
         _currentScreen.value = screen
     }
+
+    fun navigateBack() {
+        _currentScreen.value = previousScreen
+    }
 }

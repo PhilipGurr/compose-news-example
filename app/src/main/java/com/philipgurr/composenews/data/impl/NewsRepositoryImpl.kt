@@ -18,7 +18,13 @@ class NewsRepositoryImpl(
         emit(newsDataSource.getNewsPosts("us").articles)
     }.flowOn(Dispatchers.IO)
 
-    override fun loadFavorites() = localNewsDao.getAll()
+    override fun loadFavorites(): Flow<List<NewsPost>> {
+        return try {
+            localNewsDao.getAll()
+        } catch (ex: Exception) {
+            localNewsDao.getAll()
+        }
+    }
 
     override suspend fun addFavorite(newsPost: NewsPost) {
         localNewsDao.insert(newsPost)
