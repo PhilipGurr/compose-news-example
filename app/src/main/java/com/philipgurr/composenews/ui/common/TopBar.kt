@@ -10,9 +10,9 @@ import androidx.compose.ui.res.vectorResource
 import com.philipgurr.composenews.R
 
 @Composable
-fun DefaultTopBar(scaffoldState: ScaffoldState) {
+fun DefaultTopBar(scaffoldState: ScaffoldState, title: String) {
     TopAppBar(
-        title = { Text(text = "News") },
+        title = { Text(text = title) },
         navigationIcon = {
             IconButton(
                 icon = { Icon(asset = vectorResource(id = R.drawable.ic_launcher_foreground)) },

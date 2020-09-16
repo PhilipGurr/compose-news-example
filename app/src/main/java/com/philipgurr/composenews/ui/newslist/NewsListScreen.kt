@@ -22,7 +22,7 @@ fun NewsListScreen(navigationViewModel: NavigationViewModel, repository: NewsRep
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            DefaultTopBar(scaffoldState = scaffoldState)
+            DefaultTopBar(scaffoldState = scaffoldState, "News")
         },
         drawerContent = {
             Drawer(navigationViewModel = navigationViewModel, navigate = navigate)

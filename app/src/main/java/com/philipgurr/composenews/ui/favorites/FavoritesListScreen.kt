@@ -21,7 +21,7 @@ fun FavoritesListScreen(navigationViewModel: NavigationViewModel, repository: Ne
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            DefaultTopBar(scaffoldState = scaffoldState)
+            DefaultTopBar(scaffoldState = scaffoldState, "Favorites")
         },
         drawerContent = {
             Drawer(navigationViewModel = navigationViewModel, navigate = navigate)
