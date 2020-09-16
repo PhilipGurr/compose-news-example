@@ -1,3 +1,4 @@
+# Compose News
 Example News App using
 *   [Jetpack Compose](https://developer.android.com/jetpack/compose)
 *   [Room Persistence Library](https://developer.android.com/topic/libraries/architecture/room)
