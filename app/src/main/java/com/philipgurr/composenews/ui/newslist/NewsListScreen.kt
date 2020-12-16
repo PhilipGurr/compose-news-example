@@ -1,21 +1,21 @@
 package com.philipgurr.composenews.ui.newslist
 
-import androidx.compose.foundation.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.ui.tooling.preview.Preview
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import com.philipgurr.composenews.data.NewsRepository
 import com.philipgurr.composenews.domain.NewsPost
 import com.philipgurr.composenews.ui.common.DefaultTopBar
 import com.philipgurr.composenews.ui.common.Drawer
 import com.philipgurr.composenews.ui.common.NewsList
-import com.philipgurr.composenews.viewmodel.NavigationViewModel
 import com.philipgurr.composenews.viewmodel.Screen
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 @Composable
-fun NewsListScreen(navigationViewModel: NavigationViewModel, repository: NewsRepository, navigate: (Screen) -> Unit) {
+fun NewsListScreen(repository: NewsRepository, navigate: (Screen) -> Unit) {
     val scaffoldState = rememberScaffoldState()
     val posts by repository.loadNewsPosts().collectAsState(listOf())
 
@@ -25,7 +25,7 @@ fun NewsListScreen(navigationViewModel: NavigationViewModel, repository: NewsRep
             DefaultTopBar(scaffoldState = scaffoldState, "News")
         },
         drawerContent = {
-            Drawer(navigationViewModel = navigationViewModel, navigate = navigate)
+            Drawer(Screen.NewsList, navigate)
         },
         bodyContent = {
             NewsList(it, posts, navigate)
@@ -63,7 +63,6 @@ val testNews = listOf(
     ),
 )
 
-@Preview(showBackground = true)
 @Composable
 fun NewsListPreview() {
     Scaffold(
@@ -73,7 +72,7 @@ fun NewsListPreview() {
             )
         },
         bodyContent = {
-            NewsList(it = it, posts = testNews, navigate = {})
+            NewsList(it, posts = testNews, navigate = {})
         }
     )
 }

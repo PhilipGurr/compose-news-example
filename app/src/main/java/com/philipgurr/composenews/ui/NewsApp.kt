@@ -1,32 +1,50 @@
 package com.philipgurr.composenews.ui
 
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.navigation.NavController
+import androidx.navigation.NavType
+import androidx.navigation.compose.*
 import com.philipgurr.composenews.di.AppContainer
+import com.philipgurr.composenews.domain.NewsPost
 import com.philipgurr.composenews.ui.detail.NewsDetailScreen
 import com.philipgurr.composenews.ui.favorites.FavoritesListScreen
 import com.philipgurr.composenews.ui.newslist.NewsListScreen
-import com.philipgurr.composenews.viewmodel.NavigationViewModel
 import com.philipgurr.composenews.viewmodel.Screen
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 @Composable
-fun NewsApp(navigationViewModel: NavigationViewModel, appContainer: AppContainer) {
-    val currentScreen by navigationViewModel.currentScreen.observeAsState()
+fun NewsApp(appContainer: AppContainer) {
+    val navController = rememberNavController()
 
-    Crossfade(current = currentScreen, animation = tween(500)) { screen ->
-        when(screen) {
-            is Screen.NewsDetail -> NewsDetailScreen(navigationViewModel, appContainer.newsRepository, screen.newsPost)
-            is Screen.FavoritesList -> FavoritesListScreen(navigationViewModel, appContainer.newsRepository) {
-                navigationViewModel.navigateTo(it)
-            }
-            else -> {
-                NewsListScreen(navigationViewModel, appContainer.newsRepository) {
-                    navigationViewModel.navigateTo(it)
-                }
-            }
+    NavHost(navController = navController, startDestination = "newsList") {
+        composable("newsList") {
+            NewsListScreen(appContainer.newsRepository, navController::toScreen)
         }
+        composable("favoritesList") {
+            FavoritesListScreen(appContainer.newsRepository, navController::toScreen)
+        }
+        composable(
+            "detail/{post}",
+            arguments = listOf(navArgument("post") { type = NavType.StringType })) { backstackEntry ->
+            val post = backstackEntry.arguments?.getString("post", "") ?: ""
+            NewsDetailScreen(
+                appContainer.newsRepository,
+                Json.decodeFromString(post),
+                navController::toScreen
+            )
+        }
+    }
+}
+
+private fun NavController.toScreen(screen: Screen) {
+    when(screen) {
+        is Screen.Previous -> popBackStack()
+        is Screen.NewsDetail -> {
+            val newsPostUrl = "detail/" + Json.encodeToString(screen.newsPost)
+            navigate(newsPostUrl)
+        }
+        else -> navigate(screen.navUrl)
     }
 }

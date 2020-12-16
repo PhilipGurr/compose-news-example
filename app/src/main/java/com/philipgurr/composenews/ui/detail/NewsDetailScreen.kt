@@ -1,38 +1,24 @@
 package com.philipgurr.composenews.ui.detail
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
-import androidx.compose.foundation.Icon
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.ConstraintLayout
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.savedinstancestate.listSaver
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ContextAmbient
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.ui.tooling.preview.Preview
 import com.philipgurr.composenews.R
 import com.philipgurr.composenews.data.NewsRepository
 import com.philipgurr.composenews.domain.NewsPost
-import com.philipgurr.composenews.viewmodel.NavigationViewModel
+import com.philipgurr.composenews.viewmodel.Screen
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.launch
 
 @Composable
-fun NewsDetailScreen(navigationViewModel: NavigationViewModel, newsRepository: NewsRepository, newsPost: NewsPost) {
+fun NewsDetailScreen(newsRepository: NewsRepository, newsPost: NewsPost, navigate: (Screen) -> Unit) {
     val scope = rememberCoroutineScope()
-    val isFavorite = remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -40,17 +26,27 @@ fun NewsDetailScreen(navigationViewModel: NavigationViewModel, newsRepository: N
                 title = { Text(text = "Article") },
                 navigationIcon = {
                     IconButton(
-                        icon = { Icon(asset = vectorResource(id = R.drawable.arrow_back)) },
-                        onClick = { navigationViewModel.navigateBack() })
+                        onClick = { navigate(Screen.Previous) }) {
+                        Icon(imageVector = vectorResource(id = R.drawable.arrow_back))
+                    }
                 },
                 actions = {
-                    IconButton(onClick = {
-                        scope.launch {
-                            newsRepository.addFavorite(newsPost)
-                            isFavorite.value = true
+                    val favorites = newsRepository.loadFavorites().collectAsState(initial = listOf())
+                    val isFavorite = favorites.value.any { newsPost.url == it.url }
+                    IconButton(
+                        onClick = {
+                            scope.launch {
+                                if(!isFavorite) {
+                                    newsRepository.addFavorite(newsPost)
+                                }
+                            }
+                        }) {
+                        val res = if(isFavorite) {
+                            R.drawable.favorite_filled
+                        } else {
+                            R.drawable.favorite_empty
                         }
-                    }) {
-                        Icon(asset = vectorResource(id = if (isFavorite.value) R.drawable.favorite_filled else R.drawable.favorite_empty))
+                        Icon(imageVector = vectorResource(id = res))
                     }
                 }
             )

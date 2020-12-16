@@ -1,7 +1,7 @@
 package com.philipgurr.composenews.ui.common
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Text
+import androidx.compose.material.Text
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumnFor
@@ -20,12 +20,11 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
 fun NewsList(
-    it: InnerPadding,
+    padding: PaddingValues,
     posts: List<NewsPost>,
     navigate: (Screen) -> Unit
 ) {
-    val baseModifier = Modifier.padding(it)
-
+    val baseModifier = Modifier.padding(padding)
     LazyColumnFor(
         items = posts,
         modifier = baseModifier.fillMaxWidth().fillMaxHeight()
@@ -46,7 +45,7 @@ fun NewsListItem(newsPost: NewsPost, onClick: (NewsPost) -> Unit) {
     ) {
         Column(
             modifier = Modifier.fillMaxWidth().clickable(onClick = { onClick(newsPost) }),
-            horizontalGravity = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val imageUrl = newsPost.urlToImage
             if(imageUrl != null && imageUrl.isNotEmpty()) {
@@ -58,13 +57,13 @@ fun NewsListItem(newsPost: NewsPost, onClick: (NewsPost) -> Unit) {
                 )
             }
 
-            articleText(newsPost)
+            ArticleText(newsPost)
         }
     }
 }
 
 @Composable
-private fun articleText(newsPost: NewsPost) {
+private fun ArticleText(newsPost: NewsPost) {
     val paddingTitle = Modifier.padding(15.dp, 10.dp, 15.dp, 5.dp)
     val paddingDesc = Modifier.padding(15.dp, 5.dp, 15.dp, 20.dp)
     Text(

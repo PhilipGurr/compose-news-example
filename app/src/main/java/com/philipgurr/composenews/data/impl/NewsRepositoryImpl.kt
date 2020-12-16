@@ -1,13 +1,14 @@
 package com.philipgurr.composenews.data.impl
 
-import android.util.Log
 import com.philipgurr.composenews.data.NewsRepository
 import com.philipgurr.composenews.data.datasource.LocalNewsDataSource
 import com.philipgurr.composenews.data.datasource.NewsDataSource
 import com.philipgurr.composenews.domain.NewsPost
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
 @ExperimentalCoroutinesApi
 class NewsRepositoryImpl(

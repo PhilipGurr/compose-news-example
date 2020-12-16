@@ -1,10 +1,6 @@
 package com.philipgurr.composenews.ui.common
 
-import androidx.compose.foundation.Icon
-import androidx.compose.foundation.Text
-import androidx.compose.material.IconButton
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.vectorResource
 import com.philipgurr.composenews.R
@@ -15,8 +11,9 @@ fun DefaultTopBar(scaffoldState: ScaffoldState, title: String) {
         title = { Text(text = title) },
         navigationIcon = {
             IconButton(
-                icon = { Icon(asset = vectorResource(id = R.drawable.ic_launcher_foreground)) },
-                onClick = { scaffoldState.drawerState.open() })
+                onClick = { scaffoldState.drawerState.open() }) {
+                Icon(vectorResource(id = R.drawable.ic_launcher_foreground))
+            }
         }
     )
 }

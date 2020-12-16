@@ -5,10 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.philipgurr.composenews.domain.NewsPost
 
-sealed class Screen {
-    object NewsList : Screen()
-    object FavoritesList : Screen()
-    data class NewsDetail(val newsPost: NewsPost) : Screen()
+sealed class Screen(val navUrl: String) {
+
+    object NewsList : Screen("newsList")
+    object FavoritesList : Screen("favoritesList")
+    data class NewsDetail(val newsPost: NewsPost) : Screen("detail/{post}")
+    object Previous : Screen("")
 }
 
 class NavigationViewModel : ViewModel() {
