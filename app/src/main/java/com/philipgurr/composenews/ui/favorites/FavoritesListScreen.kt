@@ -8,7 +8,7 @@ import com.philipgurr.composenews.data.NewsRepository
 import com.philipgurr.composenews.ui.common.DefaultTopBar
 import com.philipgurr.composenews.ui.common.Drawer
 import com.philipgurr.composenews.ui.common.NewsList
-import com.philipgurr.composenews.viewmodel.Screen
+import com.philipgurr.composenews.domain.Screen
 
 @Composable
 fun FavoritesListScreen(repository: NewsRepository, navigate: (Screen) -> Unit) {

@@ -5,11 +5,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.*
 import com.philipgurr.composenews.di.AppContainer
-import com.philipgurr.composenews.domain.NewsPost
 import com.philipgurr.composenews.ui.detail.NewsDetailScreen
 import com.philipgurr.composenews.ui.favorites.FavoritesListScreen
 import com.philipgurr.composenews.ui.newslist.NewsListScreen
-import com.philipgurr.composenews.viewmodel.Screen
+import com.philipgurr.composenews.domain.Screen
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

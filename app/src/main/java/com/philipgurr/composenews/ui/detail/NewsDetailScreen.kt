@@ -5,14 +5,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.savedinstancestate.listSaver
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.philipgurr.composenews.R
 import com.philipgurr.composenews.data.NewsRepository
 import com.philipgurr.composenews.domain.NewsPost
-import com.philipgurr.composenews.viewmodel.Screen
+import com.philipgurr.composenews.domain.Screen
 import dev.chrisbanes.accompanist.coil.CoilImage
 import kotlinx.coroutines.launch
 

@@ -15,7 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.philipgurr.composenews.domain.NewsPost
-import com.philipgurr.composenews.viewmodel.Screen
+import com.philipgurr.composenews.domain.Screen
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
