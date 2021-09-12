@@ -1,22 +1,29 @@
 package com.philipgurr.composenews.ui.detail
 
-import androidx.compose.foundation.layout.ConstraintLayout
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import coil.compose.rememberImagePainter
 import com.philipgurr.composenews.R
 import com.philipgurr.composenews.data.NewsRepository
 import com.philipgurr.composenews.domain.NewsPost
 import com.philipgurr.composenews.domain.Screen
-import dev.chrisbanes.accompanist.coil.CoilImage
+import kotlinx.coroutines.NonDisposableHandle.parent
 import kotlinx.coroutines.launch
 
 @Composable
-fun NewsDetailScreen(newsRepository: NewsRepository, newsPost: NewsPost, navigate: (Screen) -> Unit) {
+fun NewsDetailScreen(
+    newsRepository: NewsRepository,
+    newsPost: NewsPost,
+    navigate: (Screen) -> Unit
+) {
     val scope = rememberCoroutineScope()
 
     Scaffold(
@@ -26,31 +33,35 @@ fun NewsDetailScreen(newsRepository: NewsRepository, newsPost: NewsPost, navigat
                 navigationIcon = {
                     IconButton(
                         onClick = { navigate(Screen.Previous) }) {
-                        Icon(imageVector = vectorResource(id = R.drawable.arrow_back))
+                        Icon(
+                            painter = painterResource(id = R.drawable.arrow_back),
+                            contentDescription = "Navigate"
+                        )
                     }
                 },
                 actions = {
-                    val favorites = newsRepository.loadFavorites().collectAsState(initial = listOf())
+                    val favorites =
+                        newsRepository.loadFavorites().collectAsState(initial = listOf())
                     val isFavorite = favorites.value.any { newsPost.url == it.url }
                     IconButton(
                         onClick = {
                             scope.launch {
-                                if(!isFavorite) {
+                                if (!isFavorite) {
                                     newsRepository.addFavorite(newsPost)
                                 }
                             }
                         }) {
-                        val res = if(isFavorite) {
+                        val res = if (isFavorite) {
                             R.drawable.favorite_filled
                         } else {
                             R.drawable.favorite_empty
                         }
-                        Icon(imageVector = vectorResource(id = res))
+                        Icon(painter = painterResource(id = res), contentDescription = "Favorite")
                     }
                 }
             )
         },
-        bodyContent = {
+        content = {
             Article(newsPost = newsPost)
         }
     )
@@ -62,32 +73,42 @@ fun Article(newsPost: NewsPost) {
         val (image, title, articleText) = createRefs()
 
         val imageUrl = newsPost.urlToImage
-        if(imageUrl != null && imageUrl.isNotEmpty()) {
-            CoilImage(
-                data = newsPost.urlToImage,
-                modifier = Modifier.fillMaxWidth().constrainAs(image) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                })
+        if (imageUrl != null && imageUrl.isNotEmpty()) {
+            Image(
+                painter = rememberImagePainter(imageUrl),
+                contentDescription = "Article Image",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .constrainAs(image) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+            )
         }
 
 
         Text(
             text = newsPost.title ?: "",
             style = MaterialTheme.typography.h5,
-            modifier = Modifier.fillMaxWidth().padding(10.dp).constrainAs(title) {
-                top.linkTo(image.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            })
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+                .constrainAs(title) {
+                    top.linkTo(image.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                })
         Text(
             text = newsPost.content ?: "No content!",
             style = MaterialTheme.typography.body2,
-            modifier = Modifier.fillMaxWidth().padding(10.dp).constrainAs(articleText) {
-                top.linkTo(title.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            })
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+                .constrainAs(articleText) {
+                    top.linkTo(title.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                })
     }
 }

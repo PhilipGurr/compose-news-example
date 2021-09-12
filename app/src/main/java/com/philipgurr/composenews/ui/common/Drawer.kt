@@ -1,16 +1,16 @@
 package com.philipgurr.composenews.ui.common
 
-import androidx.compose.foundation.ClickableText
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -24,7 +24,7 @@ fun Drawer(currentScreen: Screen, navigate: (Screen) -> Unit) {
         modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val activatedColor = Color(AmbientContext.current.getColor(R.color.design_default_color_primary))
+        val activatedColor = Color(LocalContext.current.getColor(R.color.design_default_color_primary))
 
 
         showHome(currentScreen, activatedColor, navigate)

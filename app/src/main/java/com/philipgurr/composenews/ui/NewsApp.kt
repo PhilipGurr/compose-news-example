@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.*
+import com.philipgurr.composenews.data.fromNavArg
+import com.philipgurr.composenews.data.toNavArg
 import com.philipgurr.composenews.di.AppContainer
 import com.philipgurr.composenews.ui.detail.NewsDetailScreen
 import com.philipgurr.composenews.ui.favorites.FavoritesListScreen
@@ -30,7 +32,7 @@ fun NewsApp(appContainer: AppContainer) {
             val post = backstackEntry.arguments?.getString("post", "") ?: ""
             NewsDetailScreen(
                 appContainer.newsRepository,
-                Json.decodeFromString(post),
+                post.fromNavArg(),
                 navController::toScreen
             )
         }
@@ -41,7 +43,7 @@ private fun NavController.toScreen(screen: Screen) {
     when(screen) {
         is Screen.Previous -> popBackStack()
         is Screen.NewsDetail -> {
-            val newsPostUrl = "detail/" + Json.encodeToString(screen.newsPost)
+            val newsPostUrl = "detail/" + screen.newsPost.toNavArg()
             navigate(newsPostUrl)
         }
         else -> navigate(screen.navUrl)

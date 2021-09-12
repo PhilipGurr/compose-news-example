@@ -1,10 +1,12 @@
 package com.philipgurr.composenews.ui.common
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.material.Text
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumnFor
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -13,10 +15,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
+import coil.size.OriginalSize
+import coil.size.Scale
 import com.philipgurr.composenews.domain.NewsPost
 import com.philipgurr.composenews.domain.Screen
-import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
 fun NewsList(
@@ -25,13 +30,17 @@ fun NewsList(
     navigate: (Screen) -> Unit
 ) {
     val baseModifier = Modifier.padding(padding)
-    LazyColumnFor(
-        items = posts,
-        modifier = baseModifier.fillMaxWidth().fillMaxHeight()
-    ) { newsPost ->
-        NewsListItem(newsPost = newsPost, onClick = {
-            navigate(Screen.NewsDetail(newsPost))
-        })
+    LazyColumn(
+        modifier = baseModifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+    ) {
+        items(posts) {
+            NewsListItem(newsPost = it, onClick = { post ->
+                navigate(Screen.NewsDetail(post))
+            })
+        }
+
     }
 }
 
@@ -44,16 +53,24 @@ fun NewsListItem(newsPost: NewsPost, onClick: (NewsPost) -> Unit) {
         shape = RoundedCornerShape(30.dp)
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().clickable(onClick = { onClick(newsPost) }),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = { onClick(newsPost) }),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val imageUrl = newsPost.urlToImage
             if(imageUrl != null && imageUrl.isNotEmpty()) {
-                CoilImage(
-                    data = imageUrl,
-                    modifier = Modifier.fillMaxWidth().clip(
-                        RoundedCornerShape(30.dp, 30.dp, 0.dp, 0.dp)
-                    )
+                Image(
+                    painter = rememberImagePainter(data = imageUrl, builder = {
+                        size(OriginalSize)
+                        scale(Scale.FIT)
+                    }),
+                    contentDescription = "Article Image",
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier
+                        .clip(
+                            RoundedCornerShape(30.dp, 30.dp, 0.dp, 0.dp)
+                        )
                 )
             }
 

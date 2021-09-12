@@ -6,6 +6,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.tooling.preview.Preview
 import com.philipgurr.composenews.data.NewsRepository
 import com.philipgurr.composenews.domain.NewsPost
 import com.philipgurr.composenews.ui.common.DefaultTopBar
@@ -26,7 +27,7 @@ fun NewsListScreen(repository: NewsRepository, navigate: (Screen) -> Unit) {
         drawerContent = {
             Drawer(Screen.NewsList, navigate)
         },
-        bodyContent = {
+        content = {
             NewsList(it, posts.value, navigate)
         }
     )
@@ -36,7 +37,7 @@ val testNews = listOf(
     NewsPost(
         0,
         "Philip Gurr",
-        "Trump elected again",
+        "Obama elected again",
         "Small description",
         "",
         "https://static.politico.com/7a/03/4ff6924c41dfaaa873b00d0dcc94/200323-mike-bloomberg-gty-773.jpg",
@@ -45,7 +46,7 @@ val testNews = listOf(
     NewsPost(
         0,
         "Philip Gurr",
-        "Trump elected again",
+        "Obama elected again",
         "Small description",
         "",
         "https://static.politico.com/7a/03/4ff6924c41dfaaa873b00d0dcc94/200323-mike-bloomberg-gty-773.jpg",
@@ -54,7 +55,7 @@ val testNews = listOf(
     NewsPost(
         0,
         "Philip Gurr",
-        "Trump elected again",
+        "Obama elected again",
         "Small description",
         "",
         "https://static.politico.com/7a/03/4ff6924c41dfaaa873b00d0dcc94/200323-mike-bloomberg-gty-773.jpg",
@@ -70,7 +71,7 @@ fun NewsListPreview() {
                 title = { Text(text = "News") }
             )
         },
-        bodyContent = {
+        content = {
             NewsList(it, posts = testNews, navigate = {})
         }
     )

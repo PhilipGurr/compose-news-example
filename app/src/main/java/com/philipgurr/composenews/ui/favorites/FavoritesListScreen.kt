@@ -23,7 +23,7 @@ fun FavoritesListScreen(repository: NewsRepository, navigate: (Screen) -> Unit) 
         drawerContent = {
             Drawer(Screen.FavoritesList, navigate = navigate)
         },
-        bodyContent = {
+        content = {
             NewsList(it, posts.value, navigate)
         }
     )
